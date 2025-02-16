@@ -39,7 +39,7 @@ def kmeans(data, k, max_iters=100):
     return centroids, clusters, labels
 
 # Load the dataset
-file_path = "wine-clustering-reduced.csv"
+file_path = "iris-reduced.csv"
 df = pd.read_csv(file_path)
 df = df.sample(n=100, random_state=42)  # Sample 100 random rows
 
