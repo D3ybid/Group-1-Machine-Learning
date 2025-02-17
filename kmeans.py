@@ -9,17 +9,17 @@ def euclidean_distance(p1, p2):
 # k-means clustering algorithm implementation
 def kmeans(data, k, max_iters=100):
     centroids = random.sample(data, k)  # randomly pick initial centroids
-    
+
     for _ in range(max_iters):
         clusters = [[] for _ in range(k)]  # create empty clusters for each centroid
         labels = []
-        
+
         for point in data:
             distances = [euclidean_distance(point, centroid) for centroid in centroids]
             cluster_index = distances.index(min(distances))  # assign each point to the nearest centroid
             clusters[cluster_index].append(point)
             labels.append(cluster_index)
-        
+
         new_centroids = []  # calculate new centroids for each cluster
         for cluster in clusters:
             if cluster:
@@ -37,21 +37,21 @@ def kmeans(data, k, max_iters=100):
 
         centroids = new_centroids
 
-    
+
     return centroids, clusters, labels
 
 # load the dataset
-file_path = "wine-clustering.csv"
+file_path = "iris-reduced.csv"
 df = pd.read_csv(file_path)
 
-df = df.sample(n=100, random_state=42)  # sample 100 random rows to work with
+# df = df.sample(n=100, random_state=42)  # sample 100 random rows to work with
 
 # select two features for clustering (changed from 3 to 2 features)
 selected_columns = df.columns[:2]
 data_points = df[selected_columns].values.tolist()
 
-# save the reduced dataset to a new CSV file
-df[selected_columns].to_csv("wine-clustering-reduced.csv", index=False)
+# # save the reduced dataset to a new CSV file
+# df[selected_columns].to_csv("wine-clustering-reduced.csv", index=False)
 
 # apply k-means clustering with k=3
 k = 3
@@ -59,7 +59,7 @@ centroids, clusters, labels = kmeans(data_points, k)
 
 # 2D scatter plot for visualization
 fig, ax = plt.subplots()  # create a 2D plot
-colors = ['r', 'g', 'b']
+colors = ['r', 'g', 'b'] #versicolor, setosa, virginica
 
 for i in range(k):
     cluster_points = clusters[i]
