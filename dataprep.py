@@ -5,12 +5,14 @@ file_path = "iris.csv"  # Ensure this file is in your working directory
 df = pd.read_csv(file_path)
 
 # Remove the label column if it exists
-if 'Label' in df.columns or 'Species' in df.columns:
-    df = df.drop(columns=['Label'], errors='ignore')
-    df = df.drop(columns=['Species'], errors='ignore')
+if 'petal_length' in df.columns or 'petal_width' in df.columns:
+    df = df.drop(columns=['petal_length'], errors='ignore')
+    df = df.drop(columns=['petal_width'], errors='ignore')
+
+
 
 # Select only 2 features
-selected_columns = df.columns[:2]  # Select the first 2 features
+selected_columns = df.columns[:3]  # Select the first 2 features
 reduced_df = df[selected_columns].sample(n=100, random_state=42)
 
 # Save the reduced dataset
