@@ -2,6 +2,7 @@ import pandas as pd
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
 # Function to compute Euclidean distance
@@ -11,17 +12,17 @@ def euclidean_distance(p1, p2):
 # K-Means Algorithm
 def kmeans(data, k, max_iters=100):
     centroids = random.sample(data, k)  # Randomly pick initial centroids
-
+    
     for _ in range(max_iters):
         clusters = [[] for _ in range(k)]
         labels = []
-
+        
         for point in data:
             distances = [euclidean_distance(point, centroid) for centroid in centroids]
             cluster_index = np.argmin(distances)  # Assign to closest centroid
             clusters[cluster_index].append(point)
             labels.append(cluster_index)
-
+        
         new_centroids = []
         for cluster in clusters:
             if cluster:
@@ -29,12 +30,12 @@ def kmeans(data, k, max_iters=100):
                 new_centroids.append(new_centroid)
             else:
                 new_centroids.append(random.choice(data))  # Handle empty clusters
-
+        
         if np.allclose(new_centroids, centroids, atol=1e-6):
             break
-
+        
         centroids = new_centroids
-
+    
     return centroids, clusters, labels
 
 # Load dataset
@@ -81,6 +82,14 @@ print(conf_matrix)
 print("\nClassification Report:")
 print(classification_rep)
 print(f"\nOverall Accuracy: {accuracy:.2f}")
+
+# Visualize Confusion Matrix
+plt.figure(figsize=(6, 5))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=set(true_test_labels), yticklabels=set(true_test_labels))
+plt.xlabel("Predicted Labels")
+plt.ylabel("True Labels")
+plt.title("Confusion Matrix")
+plt.show()
 
 # Plot Clusters
 fig, ax = plt.subplots()
