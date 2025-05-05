@@ -5,6 +5,9 @@ import networkx as nx
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
 
+MIN_SUPP = 0.005 # For minimum support. Mainly affects frequent items
+MIN_CONF = 0.1 # For minimum confidence. Mainly affects associasion rules
+
 # STEP 1: Load the dataset
 df = pd.read_csv("apriori/Groceries_dataset.csv")
 
@@ -13,6 +16,10 @@ df['Transaction'] = df['Member_number'].astype(str) + "_" + df['Date'].astype(st
 
 # STEP 3: Convert to list of transactions
 transactions = df.groupby('Transaction')['itemDescription'].apply(list).tolist()
+# Log transactions to txt file
+with open("apriori/log_transactions.txt", "w") as f:
+    for tid, items in (df.groupby('Transaction')['itemDescription'].apply(list)).items():
+        f.write(f"{tid}:\t" + ', '.join(items) + '\n')
 
 # STEP 4: One-hot encode
 te = TransactionEncoder()
@@ -20,28 +27,45 @@ te_array = te.fit(transactions).transform(transactions)
 df_encoded = pd.DataFrame(te_array, columns=te.columns_)
 
 # STEP 5: Apriori algorithm (with all itemsets)
-frequent_itemsets = apriori(df_encoded, min_support=0.005, use_colnames=True)
+frequent_itemsets = apriori(df_encoded, min_support=MIN_SUPP, use_colnames=True) # Support of 0.005 is minimum support of 75 transactions
 
 # STEP 6: Generate association rules BEFORE filtering itemsets
-rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.1)
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=MIN_CONF)
 
 # STEP 7 (optional): Filter itemsets (only after rules generated)
 frequent_itemsets = frequent_itemsets[frequent_itemsets['itemsets'].apply(lambda x: len(x) > 1)]
 rules = rules[(rules['antecedents'].apply(len) > 0) & (rules['consequents'].apply(len) > 0)]
+
+# Log frequent Itemsets and Support Values
+with open("apriori/log_frequent_item_sets.txt", "w") as f:
+    for _, row in frequent_itemsets.sort_values(by="support", ascending=False).iterrows():
+        items = ', '.join(sorted(row['itemsets']))
+        support = f"{row['support']:.4f}"
+        f.write(f"Itemset ({len(row['itemsets'])}): {items} | Support: {support}\n")
+
+# Log Rules in [I1^...IN]=>[I] Form
+with open("apriori/log_association_rules.txt", "w") as f:
+    for _, row in rules.iterrows():
+        antecedent = ' + '.join(sorted(row['antecedents']))
+        consequent = ' + '.join(sorted(row['consequents']))
+        f.write(f"[{antecedent}] => [{consequent}]\n")
+
 
 # STEP 8: Display frequent itemsets and rules
 if frequent_itemsets.empty:
     print("No frequent itemsets found.")
 else:
     print("Top Frequent Itemsets:")
-    print(frequent_itemsets.sort_values(by="support", ascending=False).head(10))
+    for idx, row in frequent_itemsets.sort_values(by="support", ascending=False).head(10).iterrows():
+        items = ', '.join(sorted(row['itemsets']))
+        print(f"{items}: support = {row['support']:.4f}")
 
 if rules.empty:
     print("\n No association rules found.")
 else:
     print("\n Top Association Rules:")
     print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']]
-          .sort_values(by='lift', ascending=False).head(10))
+        .sort_values(by='lift', ascending=False).head(10))
 
 
 def plot_top_frequent_items(itemsets, top_n=10):
@@ -85,11 +109,11 @@ def plot_association_rules(rules, top_n=10):
     edge_weights = [G[u][v]['weight'] * 5 for u, v in G.edges()]
     nx.draw_networkx_nodes(G, pos, node_color='skyblue', node_size=3000)
     nx.draw_networkx_edges(G, pos, arrowstyle='->', arrowsize=20, edge_color=edge_weights,
-                           edge_cmap=plt.cm.Blues, width=2)
+                        edge_cmap=plt.cm.Blues, width=2)
     nx.draw_networkx_labels(G, pos, font_size=12, font_color='black')
 
     sm = plt.cm.ScalarMappable(cmap=plt.cm.Blues,
-                               norm=plt.Normalize(vmin=min(edge_weights), vmax=max(edge_weights)))
+                            norm=plt.Normalize(vmin=min(edge_weights), vmax=max(edge_weights)))
     sm.set_array([])
     ax = plt.gca()
     cbar = plt.colorbar(sm, ax=ax, shrink=0.5)
