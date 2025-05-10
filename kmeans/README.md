@@ -13,7 +13,17 @@ This repository contains Python scripts for performing K-Means clustering on the
 
 **test2.py**: Evaluates K-Means clustering using accuracy metrics and confusion matrix.
 
-# Dependencies
+# How to Run
+## I. Repository
+### 1. Clone the repository on your machine
+```bash
+git clone https://github.com/D3ybid/Group-1-Machine-Learning.git
+```
+### 2. Change the directory to the Kmeans implementation
+```bash
+cd kmeans
+```
+## II. Dependencies
 
 Ensure you have the following Python libraries installed before running the scripts:
 
@@ -21,7 +31,7 @@ Ensure you have the following Python libraries installed before running the scri
 pip install pandas numpy matplotlib seaborn scikit-learn
 ```
 
-# Usage
+## III. Usage
 
 ### 1. Data Preparation
 
@@ -56,7 +66,7 @@ python test2.py
 ```
 
 This script computes accuracy, confusion matrix, and classification reports for model evaluation.
-# Output
+## Output
 
 **iris-reduced.csv**: Processed dataset with selected features.
 
