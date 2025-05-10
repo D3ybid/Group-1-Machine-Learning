@@ -9,7 +9,7 @@ MIN_SUPP = 0.01 # For minimum support
 MIN_CONF = 0.3   # For minimum confidence
 
 # STEP 1: Load the dataset
-df = pd.read_csv("apriori/Groceries_dataset.csv")
+df = pd.read_csv("Groceries_dataset.csv")
 
 # STEP 2: Create unique transaction IDs
 df['Transaction'] = df['Member_number'].astype(str) + "_" + df['Date'].astype(str)
@@ -22,7 +22,7 @@ df = df[df['Transaction'].isin(first_300_transactions)]
 transactions = df.groupby('Transaction')['itemDescription'].apply(list).tolist()
 
 # Log transactions
-with open("apriori/log_transactions.txt", "w") as f:
+with open("log_transactions.txt", "w") as f:
     for tid, items in df.groupby('Transaction')['itemDescription'].apply(list).items():
         f.write(f"{tid}:\t" + ', '.join(items) + '\n')
 
@@ -42,14 +42,14 @@ frequent_itemsets = frequent_itemsets[frequent_itemsets['itemsets'].apply(lambda
 rules = rules[(rules['antecedents'].apply(len) > 0) & (rules['consequents'].apply(len) > 0)]
 
 # Log frequent Itemsets and Support Values
-with open("apriori/log_frequent_item_sets.txt", "w") as f:
+with open("log_frequent_item_sets.txt", "w") as f:
     for _, row in frequent_itemsets.sort_values(by="support", ascending=False).iterrows():
         items = ', '.join(sorted(row['itemsets']))
         support = f"{row['support']:.4f}"
         f.write(f"Itemset ({len(row['itemsets'])}): {items} | Support: {support}\n")
 
 # Log Rules in readable format
-with open("apriori/log_association_rules.txt", "w") as f:
+with open("log_association_rules.txt", "w") as f:
     for _, row in rules.iterrows():
         antecedent = ' + '.join(sorted(row['antecedents']))
         consequent = ' + '.join(sorted(row['consequents']))
