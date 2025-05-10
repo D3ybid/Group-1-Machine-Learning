@@ -29,10 +29,17 @@ This project is open-source and available for use and modification.
 # Authors
 
 Agapito, Hazel Anne A.
+
 Agno, Tricia Mae C.
+
 Andino, Coren Andrei
+
 Aromin, Oliver Luis S.
+
 Balingit, Jose Emmanuel T.
+
 Bautista, Danlor
+
 Borja, Jahara Kate B.
+
 Buenaventura, John David C.
