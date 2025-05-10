@@ -1,0 +1,5 @@
+kmeans/kmeans_frames
+
+apriori/log_frequent_item_sets.txt
+apriori/log_association_rules.txt
+apriori/log_transactions.txt
