@@ -12,17 +12,17 @@ def euclidean_distance(p1, p2):
 # K-Means Algorithm
 def kmeans(data, k, max_iters=100):
     centroids = random.sample(data, k)  # Randomly pick initial centroids
-    
+
     for _ in range(max_iters):
         clusters = [[] for _ in range(k)]
         labels = []
-        
+
         for point in data:
             distances = [euclidean_distance(point, centroid) for centroid in centroids]
             cluster_index = np.argmin(distances)  # Assign to closest centroid
             clusters[cluster_index].append(point)
             labels.append(cluster_index)
-        
+
         new_centroids = []
         for cluster in clusters:
             if cluster:
@@ -30,12 +30,12 @@ def kmeans(data, k, max_iters=100):
                 new_centroids.append(new_centroid)
             else:
                 new_centroids.append(random.choice(data))  # Handle empty clusters
-        
+
         if np.allclose(new_centroids, centroids, atol=1e-6):
             break
-        
+
         centroids = new_centroids
-    
+
     return centroids, clusters, labels
 
 # Load dataset
@@ -94,11 +94,12 @@ plt.show()
 # Plot Clusters
 fig, ax = plt.subplots()
 colors = ['r', 'g', 'b']
+names = ['versicolor', 'setosa', 'virginica']
 for i in range(k):
     cluster_points = clusters[i]
     if cluster_points:
         x_vals, y_vals = zip(*cluster_points)
-        ax.scatter(x_vals, y_vals, c=colors[i], label=f'Training Cluster {i+1}', alpha=0.6)
+        ax.scatter(x_vals, y_vals, c=colors[i], label=f'{names[i]}', alpha=0.6)
 
 # Plot Test Data
 test_x, test_y = zip(*test_data)
