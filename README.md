@@ -1,6 +1,6 @@
 # Group 1 Machine Learning
 
-this is the working repository for CS 422 - Machine Learning group 1 from CS 4202.
+this is the working repository for CS 422 - Machine Learning Group 1 from CS 4202.
 # Kmeans
 
 To get started on the Kmeans implementation, navigate to the kmeans directory
