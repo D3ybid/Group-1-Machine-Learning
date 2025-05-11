@@ -110,7 +110,7 @@ def kmeans(data, k, max_iters=100):
 
 
 # load the dataset
-file_path = "iris-reduced.csv"
+file_path = "data/iris-reduced.csv"
 df = pd.read_csv(file_path)
 
 # df = df.sample(n=100, random_state=42)  # sample 100 random rows to work with

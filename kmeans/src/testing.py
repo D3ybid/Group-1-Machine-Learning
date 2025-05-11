@@ -39,7 +39,7 @@ def kmeans(data, k, max_iters=100):
     return centroids, clusters, labels
 
 # Load dataset
-file_path = "iris-reduced.csv"
+file_path = "data/iris-reduced.csv"
 df = pd.read_csv(file_path)
 selected_columns = df.columns[:2]
 data_points = df[selected_columns].values.tolist()
