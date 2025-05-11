@@ -6,7 +6,14 @@ import os
 
 def save_generation_plots(data_points, generations, selected_columns, out_dir="kmeans_frames"):
     os.makedirs(out_dir, exist_ok=True)
-    colors = ['r', 'g', 'b', 'c', 'm', 'y', 'orange', 'purple']  # extend if needed
+
+    # --- Clear existing files in the output directory ---
+    for filename in os.listdir(out_dir):
+        file_path = os.path.join(out_dir, filename)
+        if os.path.isfile(file_path) and filename.endswith(".png"):
+            os.remove(file_path)
+
+    colors = ['r', 'g', 'b', 'c', 'm', 'y', 'orange', 'purple']
     names = ['vercicolor', 'setosa', 'virginica']
 
     for gen_index, gen in enumerate(generations):
@@ -18,9 +25,8 @@ def save_generation_plots(data_points, generations, selected_columns, out_dir="k
             cluster_points = [p for p, label in zip(data_points, labels) if label == i]
             x_vals = [p[0] for p in cluster_points]
             y_vals = [p[1] for p in cluster_points]
-            ax.scatter(x_vals, y_vals, c=colors[i % len(colors)], label=f'cluseter {i}')
+            ax.scatter(x_vals, y_vals, c=colors[i % len(colors)], label=f'cluster {i}')
 
-        # Plot centroids
         cx = [c[0] for c in centroids]
         cy = [c[1] for c in centroids]
         ax.scatter(cx, cy, c='black', marker='X', s=100, label='Centroids')
