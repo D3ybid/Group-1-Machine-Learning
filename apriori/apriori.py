@@ -100,12 +100,12 @@ def plot_association_rules(rules, top_n=10):
             for cons in row['consequents']:
                 G.add_edge(ant, cons, weight=row['confidence'])
     plt.figure(figsize=(12, 8))
-    pos = nx.spring_layout(G, k=0.5, seed=42)
+    pos = nx.spring_layout(G, k=0.7, seed=42)
     edge_weights = [G[u][v]['weight'] * 5 for u, v in G.edges()]
-    nx.draw_networkx_nodes(G, pos, node_color='skyblue', node_size=3000)
-    nx.draw_networkx_edges(G, pos, arrowstyle='->', arrowsize=20, edge_color=edge_weights,
+    nx.draw_networkx_nodes(G, pos, node_color='skyblue', node_size=2500)
+    nx.draw_networkx_edges(G, pos, arrowstyle='-', arrowsize=20, edge_color=edge_weights,
                         edge_cmap=plt.cm.Blues, width=2)
-    nx.draw_networkx_labels(G, pos, font_size=12, font_color='black')
+    nx.draw_networkx_labels(G, pos, font_size=8, font_color='black')
     sm = plt.cm.ScalarMappable(cmap=plt.cm.Blues,
                             norm=plt.Normalize(vmin=min(edge_weights), vmax=max(edge_weights)))
     sm.set_array([])
