@@ -9,7 +9,7 @@ MIN_SUPP = 0.01 # For minimum support
 MIN_CONF = 0.3   # For minimum confidence
 
 # STEP 1: Load the dataset
-df = pd.read_csv("apriori/Groceries_dataset.csv")
+df = pd.read_csv("Groceries_dataset.csv")
 
 # STEP 2: Create unique transaction IDs
 df['Transaction'] = df['Member_number'].astype(str) + "_" + df['Date'].astype(str)
